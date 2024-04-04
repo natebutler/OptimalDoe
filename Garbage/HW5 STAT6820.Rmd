@@ -1,0 +1,695 @@
+---
+title: "Homework 5"
+author: "Tommy Bolton"
+date: "2023-03-20"
+output: pdf_document
+---
+
+## Problem 1
+
+```{r, comment=NA, echo=FALSE}
+MM2.11 <- function(X){
+  dimX <- dim(X)
+  f <- cbind(rep(1, dimX[1]), X, X[,2]*X[,3])
+  return(f)
+}
+D_crit <- function(X){
+  f <- MM2.11(X)
+  crit <- det(t(f)%*%f)
+  
+  return(crit)
+}
+A_crit <- function(X){
+  f <- MM2.11(X)
+  if (det(t(f)%*%f) < (.Machine$double.eps)^(0.5)){
+    crit <- Inf 
+  }
+  else{
+    crit <- sum(diag(solve(t(f)%*%f)))
+  }
+  return(crit)
+}
+X2.11_vec <- c(1, 1, -1, 1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, 1, 1, -1,
+           -1, -1, -1, 1, -1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, 1, 1, 1,
+           -1, -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1, 1, -1, -1, 1, -1,
+           -1, 1, -1, 1, -1, -1, -1, -1, 1, -1, -1, -1, 1, -1, -1, -1, -1, -1)
+X2.11 <- matrix(X2.11_vec, nrow=12, ncol=6, byrow = TRUE)
+D_author <- D_crit(X2.11)
+D_author
+```
+
+```{r, comment=NA, echo=FALSE}
+A_author <- A_crit(X2.11)
+A_author
+```
+
+The D-score for this design is 339738624 and the A-score is 0.7083333.
+
+## Problem 2
+
+```{r, comment=NA, echo=FALSE}
+CEXCH_D <- function(N, k){
+  X_vec <- runif(N*k, -1, 1)
+  X_init <- matrix(X_vec, nrow=N, ncol=k, byrow=TRUE)
+  X <- X_init
+  dimX <- dim(X)
+  D <- D_crit(X_init)
+  ## 2) CEXCH iteration
+  improvement <- TRUE
+  # iteration counter
+  n.iter <- 0
+  while(improvement){
+    n.iter <- n.iter + 1
+    D.iter <- D_crit(X)
+      for (i in 1:dimX[1]){
+        for (j in 1:dimX[2]){
+          X1 <- X
+          X2 <- X
+          X3 <- X
+          X1[i,j] <- -1
+          X2[i,j] <- 1
+          D1 <- D_crit(X1)
+          D2 <- D_crit(X2)
+          D3 <- D_crit(X3)
+        if (D2 < D1 & D3 < D1) {
+          X <- X1
+          D <- D_crit(X1)
+        }
+        else if (D2 < D3 & D1 < D3){
+          X <- X3
+          D <- D_crit(X3)
+        }
+        else if (D3 < D2 & D1 < D2){
+          X <- X2
+          D <- D_crit(X2)
+        }
+      }
+    }
+    if(D == D.iter){
+      # if no improvement was made for a full pass through design, stop
+      improvement <- FALSE
+    }# end CEXCH while loop
+  }
+  return(list(initDesign = X_init, initD = D_crit(X_init), 
+              optDesign = X, optD = D_crit(X),
+              niter = n.iter))
+}
+```
+
+
+```{r, comment=NA, cache=TRUE, echo=FALSE}
+M <- 2000
+res.list_D <- vector("list", length = M)
+for(i in 1:M){
+  res.list_D[[i]] <- CEXCH_D(N = 12, k = 6)
+}
+saveRDS(res.list_D, "D_.rds")
+scores_D <- unlist(lapply(res.list_D, function(L) L$optD))
+Eff_D <- scores_D/D_author
+```
+
+
+```{r, comment=NA, cache=TRUE, echo=FALSE}
+boxplot(Eff_D, ylab = "D-efficiency", main = "D-efficiencies of 2000 Candidate Designs")
+```
+
+
+```{r, comment=NA, cache=TRUE, echo=FALSE}
+best.found_D <- which.max(scores_D)
+
+res.list_D[[best.found_D]]
+```
+
+We found one design that had the same score as the author's but the rest of our designs did not live up to the author's.
+
+## Problem 3
+
+```{r, comment=NA, echo=FALSE}
+CEXCH_A <- function(N, k){
+  X_vec <- runif(N*k, -1, 1)
+  X_init <- matrix(X_vec, nrow=N, ncol=k, byrow=TRUE)
+  X <- X_init
+  dimX <- dim(X)
+  A <- A_crit(X_init)
+  ## 2) CEXCH iteration
+  improvement <- TRUE
+  # iteration counter
+  n.iter <- 0
+  while(improvement){
+    n.iter <- n.iter + 1
+    A.iter <- A_crit(X)
+      for (i in 1:dimX[1]){
+        for (j in 1:dimX[2]){
+          X1 <- X
+          X2 <- X
+          X3 <- X
+          X1[i,j] <- -1
+          X2[i,j] <- 1
+          A1 <- A_crit(X1)
+          A2 <- A_crit(X2)
+          A3 <- A_crit(X3)
+        if (A2 > A1 & A3 > A1) {
+          X <- X1
+          A <- A_crit(X1)
+        }
+        else if (A2 > A3 & A1 > A3){
+          X <- X3
+          A <- A_crit(X3)
+        }
+        else if (A3 > A2 & A1 > A2){
+          X <- X2
+          A <- A_crit(X2)
+        }
+      }
+    }
+    if(A == A.iter){
+      # if no improvement was made for a full pass through design, stop
+      improvement <- FALSE
+    }# end CEXCH while loop
+  }
+  return(list(initDesign = X_init, initA = A_crit(X_init), 
+              optDesign = X, optA = A_crit(X),
+              niter = n.iter))
+}
+```
+
+```{r, comment=NA, echo=FALSE, cache=TRUE}
+M <- 2000
+res.list_A <- vector("list", length = M)
+for(i in 1:M){
+  res.list_A[[i]] <- CEXCH_A(N = 12, k = 6)
+}
+saveRDS(res.list_A, "A_.rds")
+scores_A <- unlist(lapply(res.list_A, function(L) L$optA))
+Eff_A <- A_author/scores_A
+```
+
+```{r, comment=NA, cache=TRUE, echo=FALSE}
+boxplot(Eff_A, ylab = "A-efficiency", main = "A-efficiencies of 2000 Candidate Designs")
+```
+
+```{r, comment=NA, cache=TRUE, echo=FALSE}
+best.found_A <- which.min(scores_A)
+
+res.list_A[[best.found_A]]
+```
+
+The highest efficiency I got was 1 (100%), so I was able to match the quality of author's design on the A-criteria.
+
+## Problem 4
+
+```{r, comment=NA, echo=FALSE}
+A_opt <- res.list_A[[best.found_A]]
+D_opt <- res.list_D[[best.found_D]]
+D_opt_X <- D_opt[[3]]
+A_opt_X <- A_opt[[3]]
+D_eff_Aopt <- D_crit(D_opt_X)/D_crit(A_opt_X)
+D_eff_Aopt
+```
+
+
+```{r, comment=NA, echo=FALSE}
+A_eff_Dopt <- A_crit(A_opt_X)/A_crit(D_opt_X)
+A_eff_Dopt
+```
+
+Both of these designs are 100% efficient on the other criteria so neither one seems to suffer.
+
+```{r, comment=NA, cache=TRUE, echo=FALSE}
+CEXCH_D_complex <- function(N, k){
+  X_vec <- runif(N*k, -1, 1)
+  X_init <- matrix(X_vec, nrow=N, ncol=k, byrow=TRUE)
+  X <- X_init
+  dimX <- dim(X)
+  points <- seq(-1, 1, 0.1)
+  D <- D_crit(X_init)
+  ## 2) CEXCH iteration
+  improvement <- TRUE
+  # iteration counter
+  n.iter <- 0
+  while(improvement){
+    n.iter <- n.iter + 1
+    D.iter <- D_crit(X)
+      for (i in 1:dimX[1]){
+        for (j in 1:dimX[2]){
+          X1 <- X
+          X2 <- X
+          X3 <- X
+          X4 <- X
+          X5 <- X
+          X6 <- X
+          X7 <- X
+          X8 <- X
+          X9 <- X
+          X10 <- X
+          X11 <- X
+          X12 <- X
+          X13 <- X
+          X14 <- X
+          X15 <- X
+          X16 <- X
+          X17 <- X
+          X18 <- X
+          X19 <- X
+          X20 <- X
+          X21 <- X
+          X22 <- X
+          X2[i,j] <- points[1]
+          X3[i,j] <- points[2]
+          X4[i,j] <- points[3]
+          X5[i,j] <- points[4]
+          X6[i,j] <- points[5]
+          X7[i,j] <- points[6]
+          X8[i,j] <- points[7]
+          X9[i,j] <- points[8]
+          X10[i,j] <- points[9]
+          X11[i,j] <- points[10]
+          X12[i,j] <- points[11]
+          X13[i,j] <- points[12]
+          X14[i,j] <- points[13]
+          X15[i,j] <- points[14]
+          X16[i,j] <- points[15]
+          X17[i,j] <- points[16]
+          X18[i,j] <- points[17]
+          X19[i,j] <- points[18]
+          X20[i,j] <- points[19]
+          X21[i,j] <- points[20]
+          X22[i,j] <- points[21]
+          D1 <- D_crit(X1)
+          D2 <- D_crit(X2)
+          D3 <- D_crit(X3)
+          D4 <- D_crit(X4)
+          D4 <- D_crit(X4)
+          D5 <- D_crit(X5)
+          D6 <- D_crit(X6)
+          D7 <- D_crit(X7)
+          D8 <- D_crit(X8)
+          D9 <- D_crit(X9)
+          D10 <- D_crit(X10)
+          D11 <- D_crit(X11)
+          D12 <- D_crit(X12)
+          D13 <- D_crit(X13)
+          D14 <- D_crit(X14)
+          D15 <- D_crit(X15)
+          D16 <- D_crit(X16)
+          D17 <- D_crit(X17)
+          D18 <- D_crit(X18)
+          D19 <- D_crit(X19)
+          D20 <- D_crit(X20)
+          D21 <- D_crit(X21)
+          D22 <- D_crit(X22)
+          designs <- c(D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13,
+                       D14, D15, D16, D17, D18, D19, D20, D21, D22)
+        if (max(designs)==D1) {
+          X <- X1
+          D <- D_crit(X1)
+        }
+        else if (max(designs)==D2){
+          X <- X2
+          D <- D_crit(X2)
+        }
+        else if (max(designs)==D3){
+          X <- X3
+          D <- D_crit(X3)
+        }
+        else if (max(designs)==D4){
+          X <- X4
+          D <- D_crit(X4)
+        }
+        else if (max(designs)==D5){
+          X <- X5
+          D <- D_crit(X5)
+        }
+        else if (max(designs)==D6){
+          X <- X6
+          D <- D_crit(X6)
+        }
+        else if (max(designs)==D7){
+          X <- X7
+          D <- D_crit(X7)
+        }
+        else if (max(designs)==D8){
+          X <- X8
+          D <- D_crit(X8)
+        }
+        else if (max(designs)==D9){
+          X <- X9
+          D <- D_crit(X9)
+        }
+        else if (max(designs)==D10){
+          X <- X10
+          D <- D_crit(X10)
+        }
+        else if (max(designs)==D11){
+          X <- X11
+          D <- D_crit(X11)
+        }
+        else if (max(designs)==D12){
+          X <- X12
+          D <- D_crit(X12)
+        }
+        else if (max(designs)==D13){
+          X <- X13
+          D <- D_crit(X13)
+        }
+        else if (max(designs)==D14){
+          X <- X14
+          D <- D_crit(X14)
+        }
+        else if (max(designs)==D15){
+          X <- X15
+          D <- D_crit(X15)
+        }
+        else if (max(designs)==D16){
+          X <- X16
+          D <- D_crit(X16)
+        }
+        else if (max(designs)==D17){
+          X <- X17
+          D <- D_crit(X17)
+        }
+        else if (max(designs)==D18){
+          X <- X18
+          D <- D_crit(X18)
+        }
+        else if (max(designs)==D19){
+          X <- X19
+          D <- D_crit(X19)
+        }
+        else if (max(designs)==D20){
+          X <- X20
+          D <- D_crit(X20)
+        }
+        else if (max(designs)==D21){
+          X <- X21
+          D <- D_crit(X21)
+        }
+        else if (max(designs)==D22){
+          X <- X22
+          D <- D_crit(X22)
+        }
+      }
+    }
+    if(D == D.iter){
+      # if no improvement was made for a full pass through design, stop
+      improvement <- FALSE
+    }# end CEXCH while loop
+  }
+  return(list(initDesign = X_init, initD = D_crit(X_init), 
+              optDesign = X, optD = D_crit(X),
+              niter = n.iter))
+}
+```
+
+
+```{r, comment=NA, echo=FALSE, cache=TRUE}
+M <- 2000
+res.list_D_complex <- vector("list", length = M)
+for(i in 1:M){
+  res.list_D_complex[[i]] <- CEXCH_D_complex(N = 12, k = 6)
+}
+saveRDS(res.list_D_complex, "D_complex.rds")
+scores_D_complex <- unlist(lapply(res.list_D_complex , function(L) L$optD))
+Eff_D_complex <- scores_D_complex/D_author
+```
+
+```{r, comment=NA, cache=TRUE}
+boxplot(Eff_D_complex, ylab = "D-efficiency", main = "D-efficiencies of 2000 Candidate Designs")
+```
+
+```{r, comment=NA, cache=TRUE, echo=FALSE}
+best.found_D_complex <- which.max(scores_D_complex)
+
+res.list_D_complex[[best.found_D_complex]]
+```
+
+```{r, comment=NA, echo=FALSE}
+max(Eff_D_complex)
+```
+
+The best efficiency we found with the new algorithm matches that of our optimal designs before.
+
+```{r, comment=NA, echo=FALSE}
+D_opt_complex <- res.list_D_complex[[best.found_D_complex]]
+D_opt_X_complex <- D_opt_complex[[3]]
+A_eff_Dcomplex <- A_author/A_crit(D_opt_X_complex)
+A_eff_Dcomplex
+```
+
+This new D optimal design also has an A efficiecny of 1.
+
+```{r, comment=NA, echo=FALSE}
+CEXCH_A_complex <- function(N, k){
+  X_vec <- runif(N*k, -1, 1)
+  X_init <- matrix(X_vec, nrow=N, ncol=k, byrow=TRUE)
+  X <- X_init
+  dimX <- dim(X)
+  points <- seq(-1, 1, 0.1)
+  A <- A_crit(X_init)
+  ## 2) CEXCH iteration
+  improvement <- TRUE
+  # iteration counter
+  n.iter <- 0
+  while(improvement){
+    n.iter <- n.iter + 1
+    A.iter <- A_crit(X)
+      for (i in 1:dimX[1]){
+        for (j in 1:dimX[2]){
+          X1 <- X
+          X2 <- X
+          X3 <- X
+          X4 <- X
+          X5 <- X
+          X6 <- X
+          X7 <- X
+          X8 <- X
+          X9 <- X
+          X10 <- X
+          X11 <- X
+          X12 <- X
+          X13 <- X
+          X14 <- X
+          X15 <- X
+          X16 <- X
+          X17 <- X
+          X18 <- X
+          X19 <- X
+          X20 <- X
+          X21 <- X
+          X22 <- X
+          X2[i,j] <- points[1]
+          X3[i,j] <- points[2]
+          X4[i,j] <- points[3]
+          X5[i,j] <- points[4]
+          X6[i,j] <- points[5]
+          X7[i,j] <- points[6]
+          X8[i,j] <- points[7]
+          X9[i,j] <- points[8]
+          X10[i,j] <- points[9]
+          X11[i,j] <- points[10]
+          X12[i,j] <- points[11]
+          X13[i,j] <- points[12]
+          X14[i,j] <- points[13]
+          X15[i,j] <- points[14]
+          X16[i,j] <- points[15]
+          X17[i,j] <- points[16]
+          X18[i,j] <- points[17]
+          X19[i,j] <- points[18]
+          X20[i,j] <- points[19]
+          X21[i,j] <- points[20]
+          X22[i,j] <- points[21]
+          A1 <- A_crit(X1)
+          A2 <- A_crit(X2)
+          A3 <- A_crit(X3)
+          A4 <- A_crit(X4)
+          A4 <- A_crit(X4)
+          A5 <- A_crit(X5)
+          A6 <- A_crit(X6)
+          A7 <- A_crit(X7)
+          A8 <- A_crit(X8)
+          A9 <- A_crit(X9)
+          A10 <- A_crit(X10)
+          A11 <- A_crit(X11)
+          A12 <- A_crit(X12)
+          A13 <- A_crit(X13)
+          A14 <- A_crit(X14)
+          A15 <- A_crit(X15)
+          A16 <- A_crit(X16)
+          A17 <- A_crit(X17)
+          A18 <- A_crit(X18)
+          A19 <- A_crit(X19)
+          A20 <- A_crit(X20)
+          A21 <- A_crit(X21)
+          A22 <- A_crit(X22)
+          designs <- c(A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13,
+                       A14, A15, A16, A17, A18, A19, A20, A21, A22)
+        if (min(designs)==A1) {
+          X <- X1
+          A <- A_crit(X1)
+        }
+        else if (min(designs)==A2){
+          X <- X2
+          A <- A_crit(X2)
+        }
+        else if (min(designs)==A3){
+          X <- X3
+          A <- A_crit(X3)
+        }
+        else if (min(designs)==A4){
+          X <- X4
+          A <- A_crit(X4)
+        }
+        else if (min(designs)==A5){
+          X <- X5
+          A <- A_crit(X5)
+        }
+        else if (min(designs)==A6){
+          X <- X6
+          A <- A_crit(X6)
+        }
+        else if (min(designs)==A7){
+          X <- X7
+          A <- A_crit(X7)
+        }
+        else if (min(designs)==A8){
+          X <- X8
+          A <- A_crit(X8)
+        }
+        else if (min(designs)==A9){
+          X <- X9
+          A <- A_crit(X9)
+        }
+        else if (min(designs)==A10){
+          X <- X10
+          A <- A_crit(X10)
+        }
+        else if (min(designs)==A11){
+          X <- X11
+          A <- A_crit(X11)
+        }
+        else if (min(designs)==A12){
+          X <- X12
+          A <- A_crit(X12)
+        }
+        else if (min(designs)==A13){
+          X <- X13
+          A <- A_crit(X13)
+        }
+        else if (min(designs)==A14){
+          X <- X14
+          A <- A_crit(X14)
+        }
+        else if (min(designs)==A15){
+          X <- X15
+          A <- A_crit(X15)
+        }
+        else if (min(designs)==A16){
+          X <- X16
+          A <- A_crit(X16)
+        }
+        else if (min(designs)==A17){
+          X <- X17
+          A <- A_crit(X17)
+        }
+        else if (min(designs)==A18){
+          X <- X18
+          A <- A_crit(X18)
+        }
+        else if (min(designs)==A19){
+          X <- X19
+          A <- A_crit(X19)
+        }
+        else if (min(designs)==A20){
+          X <- X20
+          A <- A_crit(X20)
+        }
+        else if (min(designs)==A21){
+          X <- X21
+          A <- A_crit(X21)
+        }
+        else if (max(designs)==A22){
+          X <- X22
+          A <- A_crit(X22)
+        }
+      }
+    }
+    if(A == A.iter){
+      # if no improvement was made for a full pass through design, stop
+      improvement <- FALSE
+    }# end CEXCH while loop
+  }
+  return(list(initDesign = X_init, initA = A_crit(X_init), 
+              optDesign = X, optA = A_crit(X),
+              niter = n.iter))
+}
+```
+
+```{r, comment=NA, echo=FALSE, cache=TRUE}
+M <- 2000
+res.list_A_complex <- vector("list", length = M)
+for(i in 1:M){
+  res.list_A_complex[[i]] <- CEXCH_A_complex(N = 12, k = 6)
+}
+saveRDS(res.list_A_complex, "A_complex.rds")
+scores_A_complex <- unlist(lapply(res.list_A_complex , function(L) L$optA))
+Eff_A_complex <- A_author/scores_A_complex
+```
+
+```{r, comment=NA, echo=FALSE}
+boxplot(Eff_A_complex, ylab = "A-efficiency", main = "A-efficiencies of 2000 Candidate Designs")
+```
+
+The highest A efficiency we calculated from the 2000 designs from the $\{-1, -0.9, \cdots, 0.9, 1\}$ swaps was 0.7. Seeing as the rest of our designs had efficiency of 1 on the 2 criteria. We won't want to consider any of these designs.
+
+```{r, comment=NA, echo=FALSE}
+RPV <- function(X) { 
+  pv <-c()
+  f <- MM2.11(X)
+  for (x in 1:10000) {
+    X1_new <-runif(1, min = -1, max = 1)
+    X2_new <-runif(1, min = -1, max = 1)
+    X3_new <-runif(1, min = -1, max = 1)
+    X4_new <-runif(1, min = -1, max = 1)
+    X5_new <-runif(1, min = -1, max = 1)
+    X6_new <-runif(1, min = -1, max = 1)
+    X_new <- cbind(X1_new, X2_new, X3_new, X4_new, X5_new, X6_new)
+    F_new <- MM2.11(X_new)
+    predVar <- F_new%*%(solve(t(f)%*%f))%*%t(F_new)
+    pv <- cbind(pv, predVar)
+  }
+  return (pv)
+}
+randPredVarXA <- RPV(A_opt_X)
+SrandPredVarXA <- sort(randPredVarXA)
+plot(x=c(1:10000)/10000, y=SrandPredVarXA, main = "Competing Designs", xlab="Fraction of Design Space",
+     ylab = "Relative Prediction Variance", type = 'l', col='red')
+randPredVarXD <- RPV(D_opt_X)
+SrandPredVarXD <- sort(randPredVarXD)
+lines(x=c(1:10000)/10000, y=SrandPredVarXD,col="green")
+randPredVarXD_complex <- RPV(D_opt_X_complex)
+SrandPredVarXD_complex <- sort(randPredVarXD_complex)
+lines(x=c(1:10000)/10000, y=SrandPredVarXD_complex,col="blue")
+```
+
+I was going to add a legend, but here is the thing, the lines on the FDS plots are all on top of each other. These are the 3 optimal designs we computed, we're excluding the design we computed that optimized A using $\{-1, 0.9, \cdots 0.9, 1\}$ swaps since every design had an efficiency of less than 1 (100%). We can see that these designs always were 100% efficient for both criteria and that they have pretty much the same relative prediction variance over the design space. So because of that, I would just go with whatever design is cheapest of the 3.
+
+Here are the designs.
+
+Here is the only A optimal design we computed.
+
+```{r, comment=NA, echo=FALSE}
+A_opt_X
+```
+
+Here is the D optimal design we computed using only -1 and 1 swaps.
+```{r, comment=NA}
+D_opt_X
+```
+
+And here is the D optimal design we computed using the $\{-1, 0.9, \cdots, 0.9, 1\}$ swaps
+
+```{r, comment=NA, echo=FALSE}
+D_opt_X_complex
+```
+
+
