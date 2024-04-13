@@ -22,7 +22,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // findMinDscore
-List findMinDscore(ListOf<NumericMatrix> matrices, int order);
+NumericVector findMinDscore(ListOf<NumericMatrix> matrices, int order);
 RcppExport SEXP _optimalDoe_findMinDscore(SEXP matricesSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -34,15 +34,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // coordinate_exchange
-NumericVector coordinate_exchange(int N, int K, int order);
-RcppExport SEXP _optimalDoe_coordinate_exchange(SEXP NSEXP, SEXP KSEXP, SEXP orderSEXP) {
+List coordinate_exchange(int N, int K, int model_order);
+RcppExport SEXP _optimalDoe_coordinate_exchange(SEXP NSEXP, SEXP KSEXP, SEXP model_orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type N(NSEXP);
     Rcpp::traits::input_parameter< int >::type K(KSEXP);
-    Rcpp::traits::input_parameter< int >::type order(orderSEXP);
-    rcpp_result_gen = Rcpp::wrap(coordinate_exchange(N, K, order));
+    Rcpp::traits::input_parameter< int >::type model_order(model_orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(coordinate_exchange(N, K, model_order));
     return rcpp_result_gen;
 END_RCPP
 }

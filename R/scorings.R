@@ -37,7 +37,7 @@ model_matrix <- function(design, order){
 #' D-Criteria
 D_crit <- function(X, order){
   f <- model_matrix(X, order)
-  if (det(t(f)%*%f) < (.Machine$double.eps)){
+  if (abs(det(t(f)%*%f)) < (.Machine$double.eps)){
     crit <- Inf
   }
   else{

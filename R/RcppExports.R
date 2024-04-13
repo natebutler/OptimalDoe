@@ -9,7 +9,7 @@ findMinDscore <- function(matrices, order) {
     .Call(`_optimalDoe_findMinDscore`, matrices, order)
 }
 
-coordinate_exchange <- function(N, K, order) {
-    .Call(`_optimalDoe_coordinate_exchange`, N, K, order)
+coordinate_exchange <- function(N, K, model_order) {
+    .Call(`_optimalDoe_coordinate_exchange`, N, K, model_order)
 }
 
