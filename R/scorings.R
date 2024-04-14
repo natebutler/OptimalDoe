@@ -37,13 +37,12 @@ model_matrix <- function(design, order){
 #' D-Criteria
 D_crit <- function(X, order){
   f <- model_matrix(X, order)
-  if (abs(det(t(f)%*%f)) < (.Machine$double.eps)){
+  if (det(t(f)%*%f) == 0){
     crit <- Inf
   }
   else{
     crit <- 1 / (det(t(f)%*%f))
   }
-
   return(crit)
 }
 
@@ -58,3 +57,10 @@ A_crit <- function(X){
   }
   return(crit)
 }
+
+
+init <- matrix(c(0.17292944, 0.02412529, 0.3231838, 0.5763627), nrow = 2)
+init
+D_crit(init, 0)
+
+scores <- unlist(lapply(y, function(mat) D_crit(mat, 0)))

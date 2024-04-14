@@ -22,7 +22,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // findMinDscore
-NumericVector findMinDscore(ListOf<NumericMatrix> matrices, int order);
+List findMinDscore(ListOf<NumericMatrix> matrices, int order);
 RcppExport SEXP _optimalDoe_findMinDscore(SEXP matricesSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
