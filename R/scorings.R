@@ -59,8 +59,8 @@ A_crit <- function(X){
 }
 
 
-init <- matrix(c(0.17292944, 0.02412529, 0.3231838, 0.5763627), nrow = 2)
-init
-D_crit(init, 0)
-
-scores <- unlist(lapply(y, function(mat) D_crit(mat, 0)))
+# init <- matrix(c(0.17292944, 0.02412529, 0.3231838, 0.5763627), nrow = 2)
+# init
+# D_crit(init, 0)
+#
+# scores <- unlist(lapply(y, function(mat) D_crit(mat, 0)))
