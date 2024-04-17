@@ -131,11 +131,8 @@ List coordinate_D(int N, int K, int model_order){
   }
 
   List opt_D;
-  opt_D["initial_design"] = X_init;
-  opt_D["initial_d_score"] = as<double>(D_crit(X_init, model_order));
   opt_D["opt_design"] = X;
   opt_D["opt_d_score"] = D_cur;
-  opt_D["n_iter"] = n_iter;
 
   return opt_D;
 }
@@ -199,11 +196,8 @@ List coordinate_A(int N, int K, int model_order){
   }
 
   List opt_A;
-  opt_A["initial_design"] = X_init;
-  opt_A["initial_A_score"] = as<double>(A_crit(X_init, model_order));
   opt_A["opt_design"] = X;
   opt_A["opt_A_score"] = A_cur;
-  opt_A["n_iter"] = n_iter;
 
   return opt_A;
 }
