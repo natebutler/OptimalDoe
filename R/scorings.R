@@ -58,6 +58,7 @@ A_crit <- function(X){
   return(crit)
 }
 
+sorted_designs <- design_list[order(sapply(design_list, function(x) x[[2]]))]
 
 # init <- matrix(c(0.17292944, 0.02412529, 0.3231838, 0.5763627), nrow = 2)
 # init
