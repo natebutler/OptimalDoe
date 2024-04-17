@@ -65,6 +65,10 @@ A_crit <- function(X, order){
 }
 
 
+<<<<<<< HEAD
+=======
+sorted_designs <- design_list[order(sapply(design_list, function(x) x[[2]]))]
+>>>>>>> 2f6ad77ce731764ed9d40e57f7e9956eefe4e8bc
 singular_check <- function(X, order){
   f <- model_matrix(X, order)
   info <- t(f)%*%f
@@ -72,3 +76,12 @@ singular_check <- function(X, order){
   return(check)
 }
 
+<<<<<<< HEAD
+=======
+# init <- matrix(c(0.17292944, 0.02412529, 0.3231838, 0.5763627), nrow = 2)
+# init
+# D_crit(init, 0)
+#
+# scores <- unlist(lapply(y, function(mat) D_crit(mat, 0)))
+
+>>>>>>> 2f6ad77ce731764ed9d40e57f7e9956eefe4e8bc
