@@ -33,16 +33,41 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// coordinate_exchange
-List coordinate_exchange(int N, int K, int model_order);
-RcppExport SEXP _optimalDoe_coordinate_exchange(SEXP NSEXP, SEXP KSEXP, SEXP model_orderSEXP) {
+// findMinAscore
+List findMinAscore(ListOf<NumericMatrix> matrices, int order);
+RcppExport SEXP _optimalDoe_findMinAscore(SEXP matricesSEXP, SEXP orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< ListOf<NumericMatrix> >::type matrices(matricesSEXP);
+    Rcpp::traits::input_parameter< int >::type order(orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(findMinAscore(matrices, order));
+    return rcpp_result_gen;
+END_RCPP
+}
+// coordinate_D
+List coordinate_D(int N, int K, int model_order);
+RcppExport SEXP _optimalDoe_coordinate_D(SEXP NSEXP, SEXP KSEXP, SEXP model_orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type N(NSEXP);
     Rcpp::traits::input_parameter< int >::type K(KSEXP);
     Rcpp::traits::input_parameter< int >::type model_order(model_orderSEXP);
-    rcpp_result_gen = Rcpp::wrap(coordinate_exchange(N, K, model_order));
+    rcpp_result_gen = Rcpp::wrap(coordinate_D(N, K, model_order));
+    return rcpp_result_gen;
+END_RCPP
+}
+// coordinate_A
+List coordinate_A(int N, int K, int model_order);
+RcppExport SEXP _optimalDoe_coordinate_A(SEXP NSEXP, SEXP KSEXP, SEXP model_orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< int >::type K(KSEXP);
+    Rcpp::traits::input_parameter< int >::type model_order(model_orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(coordinate_A(N, K, model_order));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -50,7 +75,9 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_optimalDoe_d_check", (DL_FUNC) &_optimalDoe_d_check, 1},
     {"_optimalDoe_findMinDscore", (DL_FUNC) &_optimalDoe_findMinDscore, 2},
-    {"_optimalDoe_coordinate_exchange", (DL_FUNC) &_optimalDoe_coordinate_exchange, 3},
+    {"_optimalDoe_findMinAscore", (DL_FUNC) &_optimalDoe_findMinAscore, 2},
+    {"_optimalDoe_coordinate_D", (DL_FUNC) &_optimalDoe_coordinate_D, 3},
+    {"_optimalDoe_coordinate_A", (DL_FUNC) &_optimalDoe_coordinate_A, 3},
     {NULL, NULL, 0}
 };
 
