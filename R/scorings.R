@@ -65,9 +65,18 @@ A_crit <- function(X, order){
   return(crit)
 }
 
+<<<<<<< HEAD
 singular_check <- function(X, order){
   f <- model_matrix(X, order)
   info <- t(f)%*%f
   check <- matrixcalc::is.singular.matrix(info)
   return(check)
 }
+=======
+
+# init <- matrix(c(0.17292944, 0.02412529, 0.3231838, 0.5763627), nrow = 2)
+# init
+# D_crit(init, 0)
+#
+# scores <- unlist(lapply(y, function(mat) D_crit(mat, 0)))
+>>>>>>> ca6288e18365a45d3172d1cc9b65f528b048117d
