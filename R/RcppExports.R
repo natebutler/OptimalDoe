@@ -9,7 +9,30 @@ findMinDscore <- function(matrices, order) {
     .Call(`_optimalDoe_findMinDscore`, matrices, order)
 }
 
-coordinate_exchange <- function(N, K, model_order) {
-    .Call(`_optimalDoe_coordinate_exchange`, N, K, model_order)
+findMinAscore <- function(matrices, order) {
+    .Call(`_optimalDoe_findMinAscore`, matrices, order)
+}
+
+#' Coordinate Exchange Algorithm
+#'
+#'
+#' @param N the number of trials in the experiment
+#' @param K the number of factors in the experiment
+#' @param model_order order of the model that you want.
+#'   Enter 0 for a first order main effects model, 1 for a first order model
+#'   with 2 way interactions,
+#'   2 for a second order model with 2 way interactions and
+#'   squared main effects
+#'
+#' @returns a list of outputs that tells you the initial design and score,
+#'   and then the optimized design and score
+#'
+#' @export
+coordinate_D <- function(N, K, model_order) {
+    .Call(`_optimalDoe_coordinate_D`, N, K, model_order)
+}
+
+coordinate_A <- function(N, K, model_order) {
+    .Call(`_optimalDoe_coordinate_A`, N, K, model_order)
 }
 

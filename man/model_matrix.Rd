@@ -9,7 +9,13 @@ model_matrix(design, order)
 \arguments{
 \item{design}{the design matrix}
 
-\item{order}{order of the model you want}
+\item{order}{order of the model you want.
+Enter 0 for a first order main effects model,
+1 for a first order model with 2 way interactions,
+2 for a second order model with 2 way interactions and squared main effects}
+}
+\value{
+a matrix of the desired order
 }
 \description{
 Model Matrix

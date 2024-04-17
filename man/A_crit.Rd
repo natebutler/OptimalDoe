@@ -4,7 +4,7 @@
 \alias{A_crit}
 \title{A-Criteria}
 \usage{
-A_crit(X)
+A_crit(X, order)
 }
 \description{
 A-Criteria
