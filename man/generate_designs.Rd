@@ -6,6 +6,32 @@
 \usage{
 generate_designs(N, k, order = 1, criteria = "D", iterations = 1000)
 }
+\arguments{
+\item{N}{number of trials in your experiment}
+
+\item{k}{the number of factors in your experiment}
+
+\item{order}{order of the model you want.
+Enter 0 for a first order main effects model,
+1 for a first order model with 2 way interactions,
+2 for a second order model with 2 way interactions and squared main effects}
+
+\item{criteria}{the scoring criteria used to find the optimal design. Enter
+either 'A' or 'D' to score on A-criteria or D-criteria}
+
+\item{iterations}{the number of iterations you want the coordinate exchange
+algorithm to run. It is suggested that you run this algorithm 1000 times to
+best find the global optimization.}
+}
+\value{
+a list which is the length of iterations of
+  outputs that tells you the optimized design and score
+}
 \description{
-Generate Optimal Designs by Coordinate Exchange
+This function generates optimal designs using the coordinate exchange
+  algorithm. It initializes a matrix of desired size based on trials and
+  factors and then makes single entry swaps on a -1 to 1 scale.
+  The designs will be scored by the given criteria and the algorithm will
+  stop once it has found the minimum score. It will then repeat that process
+  a specified number of times to try and find the global optimization.
 }

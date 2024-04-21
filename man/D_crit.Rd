@@ -2,10 +2,21 @@
 % Please edit documentation in R/scorings.R
 \name{D_crit}
 \alias{D_crit}
-\title{D-Criteria}
+\title{D-Criteria Score}
 \usage{
-D_crit(X, order)
+D_crit(design, order)
+}
+\arguments{
+\item{design}{the design matrix you want to score}
+
+\item{order}{order of the model you want.
+Enter 0 for a first order main effects model,
+1 for a first order model with 2 way interactions,
+2 for a second order model with 2 way interactions and squared main effects}
+}
+\value{
+the score of the D-Criteria
 }
 \description{
-D-Criteria
+Score any design matrix with the D-Criteria
 }

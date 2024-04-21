@@ -1,15 +1,4 @@
-#' Model Matrix
-#'
-#' @param design the design matrix
-#' @param order order of the model you want.
-#'   Enter 0 for a first order main effects model,
-#'   1 for a first order model with 2 way interactions,
-#'   2 for a second order model with 2 way interactions and squared main effects
-#'
-#' @import matrixcalc
-#'
-#' @returns a matrix of the desired order
-#' @export
+# This function generates a model matrix of the given design
 model_matrix <- function(design, order){
   dimX <- dim(design)
   order1 <- cbind(rep(1, dimX[1]), design)
@@ -38,10 +27,23 @@ model_matrix <- function(design, order){
 
 }
 
-#' D-Criteria
-D_crit <- function(X, order){
-  f <- model_matrix(X, order)
-  singular <- singular_check(X, order)
+#' D-Criteria Score
+#'
+#' Score any design matrix with the D-Criteria
+#'
+#' @param design the design matrix you want to score
+#' @param order order of the model you want.
+#'   Enter 0 for a first order main effects model,
+#'   1 for a first order model with 2 way interactions,
+#'   2 for a second order model with 2 way interactions and squared main effects
+#' @import matrixcalc
+#'
+#' @returns the score of the D-Criteria
+#'
+#' @export
+D_crit <- function(design, order){
+  f <- model_matrix(design, order)
+  singular <- singular_check(design, order)
   if (singular == TRUE){
     crit <- Inf
   }
@@ -51,10 +53,23 @@ D_crit <- function(X, order){
   return(crit)
 }
 
-#' A-Criteria
-A_crit <- function(X, order){
-  f <- model_matrix(X, order)
-  singular <- singular_check(X, order)
+#' A-Criteria Score
+#'
+#' Score any design matrix with the A-Criteria
+#'
+#' @param design the design matrix you want to score
+#' @param order order of the model you want.
+#'   Enter 0 for a first order main effects model,
+#'   1 for a first order model with 2 way interactions,
+#'   2 for a second order model with 2 way interactions and squared main effects
+#' @import matrixcalc
+#'
+#' @returns the score of the A-Criteria
+#'
+#' @export
+A_crit <- function(design, order){
+  f <- model_matrix(design, order)
+  singular <- singular_check(design, order)
   if (singular == TRUE){
     crit <- Inf
   }
@@ -64,6 +79,8 @@ A_crit <- function(X, order){
   return(crit)
 }
 
+# this function checks if the design matrix is a singular matrix
+#' @export
 singular_check <- function(X, order){
   f <- model_matrix(X, order)
   info <- t(f)%*%f

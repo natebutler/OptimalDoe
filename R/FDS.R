@@ -39,6 +39,16 @@ FDS_helper <- function(Des_list, order) {
 #'
 #' @returns a plot of relative prediction variances over the design space
 #'
+#' @examples
+#' # Generate Optimal Designs
+#' optimal_designs <- generate_designs(N = 15, k = 3, order = 2, criteria = 'A', iterations = 10)
+#'
+#' # Pull out the 4 lowest A-Scored designs
+#' result <- lapply(head(optimal_designs, 4), `[[`, 1)
+#'
+#' # Plot those designs
+#' FDS_plot(result, order = 2)
+#'
 #' @export
 FDS_plot <- function(Des_list, order) {
   if(length(Des_list) > 4){
@@ -64,3 +74,4 @@ FDS_plot <- function(Des_list, order) {
   # Return the plot
   return(p)
 }
+

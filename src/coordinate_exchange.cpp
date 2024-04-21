@@ -59,21 +59,7 @@ List findMinAscore(ListOf<NumericMatrix> matrices, int order) {
   return result;
 }
 
-//' Coordinate Exchange Algorithm
-//'
-//'
-//' @param N the number of trials in the experiment
-//' @param K the number of factors in the experiment
-//' @param model_order order of the model that you want.
-//'   Enter 0 for a first order main effects model, 1 for a first order model
-//'   with 2 way interactions,
-//'   2 for a second order model with 2 way interactions and
-//'   squared main effects
-//'
-//' @returns a list of outputs that tells you the initial design and score,
-//'   and then the optimized design and score
-//'
-//' @export
+
 // [[Rcpp::export]]
 List coordinate_D(int N, int K, int model_order){
   Function seq("seq");
@@ -136,7 +122,6 @@ List coordinate_D(int N, int K, int model_order){
 
   return opt_D;
 }
-
 
 
 // [[Rcpp::export]]
