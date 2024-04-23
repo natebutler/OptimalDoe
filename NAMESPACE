@@ -2,7 +2,7 @@
 
 export(A_crit)
 export(D_crit)
-export(FDS_plot)
+export(fds_plot)
 export(generate_designs)
 export(singular_check)
 import(ggplot2)
