@@ -15,10 +15,11 @@ Enter 0 for a first order main effects model,
 2 for a second order model with 2 way interactions and squared main effects}
 }
 \value{
-a plot of relative prediction variances over the design space
+This function returns a plot of relative prediction variances over
+the design space for given experimental design matrices.
 }
 \description{
-Generate Fraction of Design Space plots for the design matrices
+Generate Fraction of Design Space plots for a list of design matrices
 }
 \examples{
 # Generate Optimal Designs

@@ -24,13 +24,15 @@ algorithm to run. It is suggested that you run this algorithm 1000 times to
 best find the global optimization.}
 }
 \value{
-a list which is the length of iterations of
-  outputs that tells you the optimized design and score
+This function returns a list which is the length of iterations of
+  outputs where each entry of that list is
+   a list with a length of 2, where the first entry is the optimized design
+   and the second is the associated score.
 }
 \description{
 This function generates optimal designs using the coordinate exchange
   algorithm. It initializes a matrix of desired size based on trials and
-  factors and then makes single entry swaps on a -1 to 1 scale.
+  factors and then makes single entry swaps on a standardized -1 to 1 scale.
   The designs will be scored by the given criteria and the algorithm will
   stop once it has found the minimum score. It will then repeat that process
   a specified number of times to try and find the global optimization.

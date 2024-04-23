@@ -25,7 +25,7 @@ fds_helper <- function(des_list, order) {
 
 #' Fraction of Design Space Plots
 #'
-#' Generate Fraction of Design Space plots for the design matrices
+#' Generate Fraction of Design Space plots for a list of design matrices
 #'
 #' @param des_list a list of design matrices that you want to compare
 #' @param order order of the model you want.
@@ -37,7 +37,8 @@ fds_helper <- function(des_list, order) {
 #' @import tidyr
 #' @import stats
 #'
-#' @returns a plot of relative prediction variances over the design space
+#' @returns This function returns a plot of relative prediction variances over
+#' the design space for given experimental design matrices.
 #'
 #' @examples
 #' # Generate Optimal Designs

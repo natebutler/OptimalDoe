@@ -15,8 +15,13 @@ Enter 0 for a first order main effects model,
 2 for a second order model with 2 way interactions and squared main effects}
 }
 \value{
-the score of the A-Criteria
+This function returns the trace of the inverse of the information
+matrix.
 }
 \description{
-Score any design matrix with the A-Criteria
+This function takes in a design matrix and a desired model as input. From the
+inputs, the design matrix is expanded into the model matrix and then the
+information matrix is computed. From that, inverse of the information matrix
+is computed and the trace of the inverse of the information matrix is
+calculated.
 }

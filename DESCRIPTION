@@ -2,10 +2,17 @@ Package: optimalDoe
 Type: Package
 Title: Generate Optimal Designs
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: c(
+    person("Thomsen", "Bolton", , "tommithan14@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2698-6675")),
+    person("Sam", "Brough", , "samcbrough@gmail.com", role = c("aut", "cre")),
+    person("Nathan", "Butler", , "nathanbutler2020@gmail.com", role = c("aut", "cre")),
+    person("Gabriel", "Montoya", , "montoyagabo20@gmail.com", role = c("aut", "cre"))
+  )
+Description: This package implements the coordinate exchange algorithm to 
+    generate D and A optimal experimental designs. In addition to generating 
+    optimal experimental designs, this package also provides the user with tools
+    to further analyze the generated experimental designs.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

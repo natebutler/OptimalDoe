@@ -29,7 +29,11 @@ model_matrix <- function(design, order) {
 
 #' D-Criteria Score
 #'
-#' Score any design matrix with the D-Criteria
+#' This function takes in a design matrix and a desired model as input. From the
+#' inputs, the design matrix is expanded into the model matrix and then the
+#' information matrix is computed. From that, inverse of the information matrix
+#' is computed and the determinant of the inverse of the information matrix is
+#' calculated.
 #'
 #' @param design the design matrix you want to score
 #' @param order order of the model you want.
@@ -38,7 +42,8 @@ model_matrix <- function(design, order) {
 #'   2 for a second order model with 2 way interactions and squared main effects
 #' @import matrixcalc
 #'
-#' @returns the score of the D-Criteria
+#' @returns This function returns the determinant of the inverse of the
+#' information matrix.
 #'
 #' @export
 d_crit <- function(design, order) {
@@ -54,7 +59,11 @@ d_crit <- function(design, order) {
 
 #' A-Criteria Score
 #'
-#' Score any design matrix with the A-Criteria
+#' This function takes in a design matrix and a desired model as input. From the
+#' inputs, the design matrix is expanded into the model matrix and then the
+#' information matrix is computed. From that, inverse of the information matrix
+#' is computed and the trace of the inverse of the information matrix is
+#' calculated.
 #'
 #' @param design the design matrix you want to score
 #' @param order order of the model you want.
@@ -63,7 +72,8 @@ d_crit <- function(design, order) {
 #'   2 for a second order model with 2 way interactions and squared main effects
 #' @import matrixcalc
 #'
-#' @returns the score of the A-Criteria
+#' @returns This function returns the trace of the inverse of the information
+#' matrix.
 #'
 #' @export
 a_crit <- function(design, order) {
