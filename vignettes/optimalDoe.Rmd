@@ -19,7 +19,7 @@ This vignette is intended for practitioners hoping to generate an optimal experi
 
 ## Package Installation
 ```{r setup, comment = NA}
-# devtools::install_github("natebutler/")
+# devtools::install_github("natebutler/OptimalDoe")
 library(optimalDoe)
 ```
 ## Generating Designs
