@@ -2,10 +2,10 @@
 rpv <- function(design, order) {
   pv <- rep(0, 10000)
   k <- ncol(design)
-  f <- OptimalDoe::model_matrix(design, order)
+  f <- model_matrix(design, order)
   for (i in seq_len(10000)) {
     x_samp <- matrix(stats::runif(k, min = -1, max = 1), nrow = 1)
-    f_samp <- OptimalDoe::model_matrix(x_samp, order)
+    f_samp <- model_matrix(x_samp, order)
     pred_var <- f_samp %*% (solve(t(f) %*% f)) %*% t(f_samp)
     pv[i] <- pred_var
   }
@@ -41,7 +41,7 @@ fds_helper <- function(des_list, order) {
 #'
 #' @examples
 #' # Generate Optimal Designs
-#' optimal_designs <- generate_designs(N = 15, k = 3, order = 2, criteria = "A",
+#' optimal_designs <- generate_designs(n = 15, k = 3, order = 2, criteria = "A",
 #'  iterations = 10)
 #'
 #' # Pull out the 4 lowest A-Scored designs

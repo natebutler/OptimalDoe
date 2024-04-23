@@ -3,7 +3,7 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 double d_check(NumericMatrix mat){
-  Function D_crit("D_crit");
+  Function D_crit("d_crit");
   double result = as<double>(D_crit(mat, 0));
 
   return result;
@@ -11,7 +11,7 @@ double d_check(NumericMatrix mat){
 
 // [[Rcpp::export]]
 List findMinDscore(ListOf<NumericMatrix> matrices, int order) {
-  Function D_crit("D_crit");
+  Function D_crit("d_crit");
   int num_matrices = matrices.size();
   double min_score = as<double>(D_crit(matrices[0], order)); // Initialize with starting number
   int min_index = 0;
@@ -36,7 +36,7 @@ List findMinDscore(ListOf<NumericMatrix> matrices, int order) {
 
 // [[Rcpp::export]]
 List findMinAscore(ListOf<NumericMatrix> matrices, int order) {
-  Function A_crit("A_crit");
+  Function A_crit("a_crit");
   int num_matrices = matrices.size();
   double min_score = as<double>(A_crit(matrices[0], order)); // Initialize with starting number
   int min_index = 0;
@@ -79,7 +79,7 @@ List coordinate_D(int N, int K, int model_order){
   NumericVector points = seq(-1,1,0.1);
 
   List exchange(22);
-  Function D_crit("D_crit");
+  Function D_crit("d_crit");
   int min_index = -1;
   bool improvement = true;
 
@@ -143,7 +143,7 @@ List coordinate_A(int N, int K, int model_order){
   NumericVector points = seq(-1,1,0.1);
 
   List exchange(22);
-  Function A_crit("A_crit");
+  Function A_crit("a_crit");
   int min_index = -1;
   bool improvement = true;
 

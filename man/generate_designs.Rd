@@ -4,10 +4,10 @@
 \alias{generate_designs}
 \title{Generate Optimal Designs by Coordinate Exchange}
 \usage{
-generate_designs(N, k, order = 1, criteria = "D", iterations = 1000)
+generate_designs(n, k, order = 1, criteria = "D", iterations = 1000)
 }
 \arguments{
-\item{N}{number of trials in your experiment}
+\item{n}{number of trials in your experiment}
 
 \item{k}{the number of factors in your experiment}
 

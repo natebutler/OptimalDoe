@@ -15,11 +15,11 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-This vignette is intended for practitioners hoping to generate an optimal experimental design. This package implements the coordinate exchange algorithm to generate D and A optimal experimental designs. In addition to generating optimal experimental designs, this package also provides the user with tools to further analyze the generated experimental designs. 
+This vignette is intended for practitioners hoping to generate an optimal experimental design. This package implements the coordinate exchange algorithm to generate D and A optimal experimental designs. In addition to generating optimal experimental designs, this package also provides the user with tools to further analyze the generated experimental designs. This vignette is housed at https://github.com/natebutler/OptimalDoe, where you can install the package using the code below.
 
 ## Package Installation
 ```{r setup, comment = NA}
-
+# devtools::install_github("natebutler/OptimalDoe")
 library(optimalDoe)
 ```
 ## Generating Designs
@@ -27,18 +27,18 @@ Here is how you generate some optimal designs:
 ```{r, comment = NA, cache = TRUE}
 set.seed(2187)
 designs_d <- generate_designs(
-  N = 10, k = 2, order = 1, criteria = "D",
+  n = 10, k = 2, order = 1, criteria = "D",
   iterations = 20
 )
 
 designs_a <- generate_designs(
-  N = 10, k = 2, order = 1, criteria = "A",
+  n = 10, k = 2, order = 1, criteria = "A",
   iterations = 20
 )
 ```
 Above, we specify: 
 
-* N - the number of experimental runs 
+* n - the number of experimental runs 
 * k - the number of experimental factors  
 * order - order of the model you want 
   + Enter 0 for a first order main effects model 
@@ -64,17 +64,17 @@ While our generate_design function does score generated designs on the specified
 result_a <- designs_a[[1]][[1]]
 result_d <- designs_d[[1]][[1]]
 
-D_crit(design = result_A, order = 1)
-A_crit(design = result_D, order = 1)
+d_crit(design = result_a, order = 1)
+a_crit(design = result_a, order = 1)
 ```
-The D_crit function takes a design matrix and a specified order of model (same order as before) and expands the design matrix into the model matrix then calculates and returns the determinant of the inverse of the information matrix. 
+The d_crit function takes a design matrix and a specified order of model (same order as before) and expands the design matrix into the model matrix then calculates and returns the determinant of the inverse of the information matrix. 
 
-The A_crit function takes a design matrix and a specified order of model (same order as before) and expands the design matrix into the model matrix then calculates and returns the trace of the inverse of the information matrix. 
+The a_crit function takes a design matrix and a specified order of model (same order as before) and expands the design matrix into the model matrix then calculates and returns the trace of the inverse of the information matrix. 
 
 ### Singularity Check
 Another function, singular_check, is called under the hood of the criteria functions. Its use is to check that the information matrix is not numerically singular. The threshold is machine epsilon, and if this threshold is triggered, a design is then given an undesirable score. 
 ```{r, comment = NA}
-singular_check(X = result_A, order = 1)
+singular_check(x = result_a, order = 1)
 ```
 The function returns TRUE if the information matrix calculated from the given design matrix is singular, and FALSE otherwise.
 
@@ -99,10 +99,10 @@ result_d_14_3 <- lapply(head(optimal_d, 2), `[[`, 1)
 matrix_list <- c(result_a_14_3, result_d_14_3)
 
 # Plot relative prediction variances of the designs
-FDS_plot(Des_list = matrix_list, order = 1)
+fds_plot(des_list = matrix_list, order = 1)
 ```
 
 
-The FDS_plot function returns lines corresponding to each design matrix. The labeling of the lines comes from the order of the matrices in the list, i.e. the first element is "Design1" and so forth. 
+The fds_plot function returns lines corresponding to each design matrix. The labeling of the lines comes from the order of the matrices in the list, i.e. the first element is "Design1" and so forth. 
 
 One desirable trait of an experimental design is that it has lower prediction variance over the design space. If you see one of these design signatures falling below another, the design with the lower signature has more desirable prediction variance qualities.

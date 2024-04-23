@@ -83,12 +83,12 @@ a_crit <- function(design, order) {
 #' this, we expand the design out into the model matrix and then compute the
 #' information matrix. This function then checks if the matrix is invertible.
 #'
-#' @param X A design matrix with n rows and k columns.
+#' @param x A design matrix with n rows and k columns.
 #' @param order Model you want to fit. 0 fits a first order model. 1 fits a
 #' first order model with two-way interactions. 2 fits a second order model.
 #'
 #' @returns This function returns a TRUE if the information matrix created from
-#' the design matrix is singular, FALSE if not.
+#'   the design matrix is singular, FALSE if not.
 #' @export
 singular_check <- function(x, order) {
   f <- model_matrix(x, order)

@@ -4,17 +4,17 @@
 \alias{singular_check}
 \title{Check Singularity of an information matrix from a design matrix.}
 \usage{
-singular_check(X, order)
+singular_check(x, order)
 }
 \arguments{
-\item{X}{A design matrix with n rows and k columns.}
+\item{x}{A design matrix with n rows and k columns.}
 
 \item{order}{Model you want to fit. 0 fits a first order model. 1 fits a
 first order model with two-way interactions. 2 fits a second order model.}
 }
 \value{
 This function returns a TRUE if the information matrix created from
-the design matrix is singular, FALSE if not.
+  the design matrix is singular, FALSE if not.
 }
 \description{
 This function takes in a design matrix and a model desired to be fit. From

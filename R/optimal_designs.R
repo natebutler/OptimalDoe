@@ -7,7 +7,7 @@
 #'   stop once it has found the minimum score. It will then repeat that process
 #'   a specified number of times to try and find the global optimization.
 #'
-#' @param N number of trials in your experiment
+#' @param n number of trials in your experiment
 #' @param k the number of factors in your experiment
 #' @param order order of the model you want.
 #'   Enter 0 for a first order main effects model,
