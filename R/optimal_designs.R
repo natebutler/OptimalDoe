@@ -26,6 +26,11 @@
 #'
 #' @import matrixcalc
 #'
+#' @examples
+#' generate_designs(n = 10, k = 2, order = 1, criteria = "D", iterations = 10)
+#'
+#' generate_designs(n = 13, k = 3, order = 0, criteria = "A", iterations = 10)
+#'
 #' @export
 generate_designs <- function(n, k, order = 1, criteria = "D",
                              iterations = 1000) {

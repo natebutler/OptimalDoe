@@ -23,13 +23,13 @@ Generate Fraction of Design Space plots for a list of design matrices
 }
 \examples{
 # Generate Optimal Designs
-optimal_designs <- generate_designs(n = 15, k = 3, order = 2, criteria = "A",
+optimal_designs <- generate_designs(n = 15, k = 3, order = 0, criteria = "A",
  iterations = 10)
 
 # Pull out the 4 lowest A-Scored designs
 result <- lapply(head(optimal_designs, 4), `[[`, 1)
 
 # Plot those designs
-fds_plot(result, order = 2)
+fds_plot(result, order = 0)
 
 }

@@ -37,3 +37,9 @@ This function generates optimal designs using the coordinate exchange
   stop once it has found the minimum score. It will then repeat that process
   a specified number of times to try and find the global optimization.
 }
+\examples{
+generate_designs(n = 10, k = 2, order = 1, criteria = "D", iterations = 10)
+
+generate_designs(n = 13, k = 3, order = 0, criteria = "A", iterations = 10)
+
+}

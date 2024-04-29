@@ -20,9 +20,9 @@ An optimal experimental design is one that optimizes, maximizes or minimizes, a 
 
 Before we define the objective functions we used, we first need to introduce some notation. $\mathbf{X}\in\mathbb{R}^{n\times k}$ is our design matrix where $n$ is the number of experimental runs and $k$ is the number of experimental factors being studied. $\mathbf{F}(\mathbf{X})=\mathbf{F}\in\mathbb{R}^{n\times p}$ is the model matrix expanded from the design matrix and $p$ is the number of parameters in the model of interest. 
 
-We define the D-criteria as $D(\mathbf{X})=\frac{1}{\mathbf{F'F}}$ 
+We define the D-criteria as $D(\mathbf{X})=\frac{1}{\mathbf{F'F}}$, and we are trying to find the minimize the determinant of this information given
 
-We define the A_criteria as $A(\mathbf{X})=tr[(\mathbf{F'F})^{-1}]$ 
+We define the A_criteria as $A(\mathbf{X})=tr[(\mathbf{F'F})^{-1}]$, and we are trying to minimize the trace of the information matrix created
 
 This vignette is intended for practitioners hoping to generate an optimal experimental design. This package implements the coordinate exchange algorithm to generate D and A-optimal experimental designs. In addition to generating optimal experimental designs, this package also allows one to score designs on the D-criteria and A-criteria. The package also allows the user to plot fraction of design space signatures to compare prediction variance qualities over the design space. 
 
@@ -62,9 +62,9 @@ either 'A' or 'D' to score on A-criteria or D-criteria
 The generate_designs function takes in the above parameters and runs the coordinate exchange algorithm to generate either A or D-optimal experimental designs based on the user-specified criteria. It will generate designs with N runs and k factors with the intention of fitting the order of the model specified. The user will then specify the number of iterations and the coordinate exchange algorithm will run that number of times. It should be noted that Brad Jones and Peter Goos recommend running the coordinate exchange algorithm for at least 1000 iterations in their textbook "Optimal Design of Experiments: A Case Study Approach." 
 
 ```{r, comment = NA}
-head(designs_d)
+head(designs_d, 2L)
 
-head(designs_a)
+head(designs_a, 2L)
 ```
 The generate_designs function returns an ordered list (by ascending optimality score) where the length is that of the iterations specified. Each element of that list is a list of length 2 where the first element is a locally optimal design matrix and the second is the associated optimality score associated with that matrix. 
 
@@ -94,12 +94,12 @@ Another function, singular_check, is called under the hood of the criteria funct
 ```{r, comment = NA}
 singular_check(x = result_a, order = 1)
 ```
-The function returns TRUE if the information matrix calculated from the given design matrix is singular, and FALSE otherwise.
+The function returns TRUE if the information matrix calculated from the given design matrix is singular, and FALSE otherwise. Singular matrices need to be avoided as the algorithm will not run correctly if the original matrix generated is singular. The algorithm will not register improvements as well on singular matrices and therefore can give you false improvement matrices. 
 
 ## Fraction of Design Space Plots
 After generating designs, a practitioner may want to look at prediction variance qualities to choose a design with low relative prediction variance over the design space. The fraction of design space plot plots the relative prediction variance over the design space. 
 
-We have generated 100 A and 100 D-optimal designs, each fitting the main effects model with all two-way interactions with 14 experimental runs and 3 experimental factors. Here is how you plot relative prediction variance of the candidate designs we've created for you.
+We have generated 100 A and 100 D-optimal designs, each fitting the second order with interactions and squared effects with 25 experimental runs and 4 experimental factors. Here is how you plot relative prediction variance of the candidate designs we've created for you.
 ```{r, comment = NA}
 set.seed(2199)
 
