@@ -24,7 +24,9 @@ We define the D-criteria as $D(\mathbf{X})=\frac{1}{\mathbf{F'F}}$
 
 We define the A_criteria as $A(\mathbf{X})=tr[(\mathbf{F'F})^{-1}]$ 
 
-This vignette is intended for practitioners hoping to generate an optimal experimental design. This package implements the coordinate exchange algorithm to generate D and A optimal experimental designs. In addition to generating optimal experimental designs, this package also provides the user with tools to further analyze the generated experimental designs. This vignette is housed at https://github.com/natebutler/OptimalDoe, where you can install the package using the code below.
+This vignette is intended for practitioners hoping to generate an optimal experimental design. This package implements the coordinate exchange algorithm to generate D and A-optimal experimental designs. In addition to generating optimal experimental designs, this package also allows one to score designs on the D-criteria and A-criteria. The package also allows the user to plot fraction of design space signatures to compare prediction variance qualities over the design space. 
+
+This vignette is housed at https://github.com/natebutler/OptimalDoe, where you can install the package using the code below.
 
 ## Package Installation
 ```{r setup, comment = NA}
@@ -57,14 +59,17 @@ Above, we specify:
 either 'A' or 'D' to score on A-criteria or D-criteria 
 * iterations - the number of iterations you want the coordinate exchange algorithm to run 
 
-The generate_designs function takes in the above parameters and runs the coordinate exchange algorithm to generate either A or D optimal experimental designs based on the user-specified criteria. It will generate designs with N runs and k factors with the intention of fitting the order of the model specified. The user will then specify the number of iterations and the coordinate exchange algorithm will run that number of times. It should be noted that Brad Jones and Peter Goos recommend running the coordinate exchange algorithm for at least 1000 iterations in their textbook "Optimal Design of Experiments: A Case Study Approach." 
+The generate_designs function takes in the above parameters and runs the coordinate exchange algorithm to generate either A or D-optimal experimental designs based on the user-specified criteria. It will generate designs with N runs and k factors with the intention of fitting the order of the model specified. The user will then specify the number of iterations and the coordinate exchange algorithm will run that number of times. It should be noted that Brad Jones and Peter Goos recommend running the coordinate exchange algorithm for at least 1000 iterations in their textbook "Optimal Design of Experiments: A Case Study Approach." 
 
 ```{r, comment = NA}
 head(designs_d)
 
 head(designs_a)
 ```
-The generate_designs function returns an ordered list (by ascending optimality score) where the length is that of the iterations specified. Each element of that list is a list of length 2 where the first element is a locally optimal design matrix and the second is the associated optimality score associated with that matrix.
+The generate_designs function returns an ordered list (by ascending optimality score) where the length is that of the iterations specified. Each element of that list is a list of length 2 where the first element is a locally optimal design matrix and the second is the associated optimality score associated with that matrix. 
+
+It should be noted that these optimality scores have no particular interpretation, but a lower score is better. You would to compare designs that aim to fit the same model, have the same number of experimental runs, and same number of experimental trials. 
+
 
 ## Scoring Functions
 While our generate_design function does score generated designs on the specified criteria, users may want to cross-compare scorings of the other criteria. They can do so with the following functions:
@@ -80,38 +85,48 @@ The d_crit function takes a design matrix and a specified order of model (same o
 
 The a_crit function takes a design matrix and a specified order of model (same order as before) and expands the design matrix into the model matrix then calculates and returns the trace of the inverse of the information matrix. 
 
+You may want to score your generated D-optimal designs on the A-criteria and A-optimal designs on the D-criteria. The reason for this is that sometimes a generated D-optimal design may also be A-optimal but the generated A-optimal design may not be D-optimal, or the other way around. When that happens, you would most likely want to go with the design that optimizes both objective functions. 
+
+In the code above, we are scoring a generated A-optimal design on both the A-criteria and D-criteria to see how it does on both of the criteria. 
+
 ### Singularity Check
-Another function, singular_check, is called under the hood of the criteria functions. Its use is to check that the information matrix is not numerically singular. The threshold is machine epsilon, and if this threshold is triggered, a design is then given an undesirable score. 
+Another function, singular_check, is called under the hood of the criteria functions. It's use is to check that the information matrix is not numerically singular. We need to have this check since the objective functions are defined from the inverse of the information matrix. The threshold is machine epsilon, and if this threshold is triggered, a design is then given an undesirable score. 
 ```{r, comment = NA}
 singular_check(x = result_a, order = 1)
 ```
 The function returns TRUE if the information matrix calculated from the given design matrix is singular, and FALSE otherwise.
 
 ## Fraction of Design Space Plots
-After generating designs, a practitioner may want to look at prediction variance qualities to choose a design with low relative prediction variance over the design space. 
+After generating designs, a practitioner may want to look at prediction variance qualities to choose a design with low relative prediction variance over the design space. The fraction of design space plot plots the relative prediction variance over the design space. 
 
-We have generated 1000 A and 1000 D optimal designs, each fitting the main effects model with all two-way interactions with 14 experimental runs and 3 experimental factors. Here is how you plot relative prediction variance of the candidate designs we've created for you.
+We have generated 100 A and 100 D-optimal designs, each fitting the main effects model with all two-way interactions with 14 experimental runs and 3 experimental factors. Here is how you plot relative prediction variance of the candidate designs we've created for you.
 ```{r, comment = NA}
 set.seed(2199)
 
-# A list of 1000 candidate D optimal designs
-optimal_d <- optimalDoe::optimal_D_14_3
+# A list of 100 candidate D-optimal designs
+optimal_d <- optimalDoe::optimal_D_25_4
 
-# A list of 1000 candidate A optimal designs
-optimal_a <- optimalDoe::optimal_A_14_3
+# A list of 100 candidate A-optimal designs
+optimal_a <- optimalDoe::optimal_A_25_4
 
-# Pulling out the top 2 designs in each list
-result_a_14_3 <- lapply(head(optimal_a, 2), `[[`, 1)
-result_d_14_3 <- lapply(head(optimal_d, 2), `[[`, 1)
+# Pulling out the top design from each list
+result_a_25_4 <- lapply(head(optimal_a, 1), `[[`, 1)
+result_d_25_4 <- lapply(head(optimal_d, 1), `[[`, 1)
 
 # Combining the top 2 designs from each list into one list
-matrix_list <- c(result_a_14_3, result_d_14_3)
+matrix_list <- c(result_a_25_4, result_d_25_4)
 
 # Plot relative prediction variances of the designs
-fds_plot(des_list = matrix_list, order = 1)
+fds_plot(des_list = matrix_list, order = 2)
 ```
 
 
 The fds_plot function returns lines corresponding to each design matrix. The labeling of the lines comes from the order of the matrices in the list, i.e. the first element is "Design1" and so forth. 
 
-One desirable trait of an experimental design is that it has lower prediction variance over the design space. If you see one of these design signatures falling below another, the design with the lower signature has more desirable prediction variance qualities.
+One desirable trait of an experimental design is that it has lower prediction variance over the design space. If you see one of these design signatures falling below another, the design with the lower signature has more desirable prediction variance qualities. Looking at this plot, if the practitioner was interested in making predictions, they may want to consider using design 1, the A-optimal design, instead of design 2, the D-optimal design. 
+
+## Conclusions 
+
+To reiterate, this package gives a user the tools to generate D and A-optimal designs, score the generated designs on the other criteria, and plot relative prediction variance over the design space of generated designs. A statistician hoping to learn more about experimental design or a researcher with at least some statistical background may find this package to be especially helpful.
+
+
