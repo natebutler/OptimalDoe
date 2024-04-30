@@ -16,17 +16,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-An optimal experimental design is one that optimizes, maximizes or minimizes, a function of the information. There a different functions one can optimize and when these functions are optimized, your experimental design will then have desirable traits. This package generates A-optimal and D-optimal designs. When these criteria are optimized, the resulting regression coefficients' standard errors are minimized. 
+An optimal experimental design is one that optimizes, maximizes or minimizes, a function of the information. There are different functions one can optimize and when these functions are optimized, your experimental design will then have desirable traits. This package generates A-optimal and D-optimal designs. When these criteria are optimized, the resulting regression coefficients' standard errors are minimized. 
 
 Before we define the objective functions we used, we first need to introduce some notation. $\mathbf{X}\in\mathbb{R}^{n\times k}$ is our design matrix where $n$ is the number of experimental runs and $k$ is the number of experimental factors being studied. $\mathbf{F}(\mathbf{X})=\mathbf{F}\in\mathbb{R}^{n\times p}$ is the model matrix expanded from the design matrix and $p$ is the number of parameters in the model of interest. 
 
-We define the D-criteria as $D(\mathbf{X})=\frac{1}{\mathbf{F'F}}$, and we are trying to find the minimize the determinant of this information matrix created.
+We define the D-criteria as $D(\mathbf{X})=\frac{1}{\det(\mathbf{F'F})}$, as we are trying to find the minimize the determinant of this information matrix created.
 
-We define the A_criteria as $A(\mathbf{X})=tr[(\mathbf{F'F})^{-1}]$, and we are trying to minimize the trace of the information matrix created.
+We define the A_criteria as $A(\mathbf{X})=tr[(\mathbf{F'F})^{-1}]$, as we are trying to minimize the trace of the information matrix created.
+
+## Purpose
 
 This vignette is intended for practitioners hoping to generate an optimal experimental design. This package implements the coordinate exchange algorithm to generate D and A-optimal experimental designs. In addition to generating optimal experimental designs, this package also allows one to score designs on the D-criteria and A-criteria. The package also allows the user to plot fraction of design space signatures to compare prediction variance qualities over the design space. 
 
-This vignette is housed at https://github.com/natebutler/OptimalDoe, where you can install the package using the code below.
+This vignette and package are housed at https://github.com/natebutler/OptimalDoe, where you can install the package using the code below.
 
 ## Package Installation
 ```{r setup, comment = NA}
