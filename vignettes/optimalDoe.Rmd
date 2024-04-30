@@ -92,7 +92,7 @@ You may want to score your generated D-optimal designs on the A-criteria and A-o
 In the code above, we are scoring a generated A-optimal design on both the A-criteria and D-criteria to see how it does on both of the criteria. 
 
 ### Singularity Check
-Another function, singular_check, is called under the hood of the criteria functions. It's use is to check that the information matrix is not numerically singular. We need to have this check since the objective functions are defined from the inverse of the information matrix. The threshold is machine epsilon, and if this threshold is triggered, a design is then given an undesirable score. 
+Another function, singular_check, is called under the hood of the criteria functions. It's use is to check that the information matrix is not numerically singular. We need to have this check since the objective functions are defined from the inverse of the information matrix, so that cannot work if the matrix is singular. The threshold is machine epsilon, and if this threshold is triggered, a design is then given an undesirable score. 
 ```{r, comment = NA}
 singular_check(x = result_a, order = 1)
 ```
